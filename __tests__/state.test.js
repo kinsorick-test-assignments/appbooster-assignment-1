@@ -1,48 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-// Reimport fresh StateManager (a new class, not the exported singleton)
-// to allow testing multiple independent instances.
-class StateManager {
-    #state;
-    #listeners = new Set();
-
-    constructor(initialState = {}) {
-        this.#state = this.#createProxy(initialState);
-    }
-
-    #createProxy(obj) {
-        const self = this;
-        return new Proxy(obj, {
-            set(target, key, value) {
-                if (target[key] === value) return true;
-                target[key] = value;
-                self.#notify();
-                return true;
-            },
-            get(target, key) {
-                const value = target[key];
-                if (typeof value === 'object' && value !== null) {
-                    return self.#createProxy(value);
-                }
-                return value;
-            },
-        });
-    }
-
-    #notify() {
-        this.#listeners.forEach((l) => l(this.#state));
-    }
-
-    subscribe(listener) {
-        this.#listeners.add(listener);
-        listener(this.#state);
-        return () => this.#listeners.delete(listener);
-    }
-
-    get store() {
-        return this.#state;
-    }
-}
+import { StateManager } from '../src/state.js';
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 describe('StateManager', () => {
@@ -150,8 +107,8 @@ describe('StateManager', () => {
 
     describe('Singleton (exported module)', () => {
         it('should export a singleton (same reference on every import)', async () => {
-            const modA = await import('../state.js');
-            const modB = await import('../state.js');
+            const modA = await import('../src/state.js');
+            const modB = await import('../src/state.js');
             expect(modA.default).toBe(modB.default);
         });
     });

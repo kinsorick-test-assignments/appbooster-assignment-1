@@ -1,5 +1,8 @@
 import convertService from "../convert.service.js";
 
+export const cleanInput = (input) =>
+    input.replace('in', '').toLowerCase().trim().split(' ').filter((item) => item !== '');
+
 export default {
     render: async () => {
         return `
@@ -16,7 +19,6 @@ export default {
         `;
     },
     convert: async () => {
-        const cleanInput = (input) => input.replace('in', '').toLowerCase().trim().split(' ').filter((item) => item !== '');
 
         const input = document.getElementById('convert-input').value;
         const result = document.getElementById('convert-result');

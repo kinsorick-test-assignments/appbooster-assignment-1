@@ -1,10 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import ConverterPage, { cleanInput } from '../src/pages/ConverterPage.page.js';
+import convertService from '../src/convert.service.js';
 
-// ─── Extraction of the pure input-parsing logic from ConverterPage ────────────
-// The cleanInput function is defined inline inside `convert()`.
-// We replicate it here to test it in isolation.
-const cleanInput = (input) =>
-    input.replace('in', '').toLowerCase().trim().split(' ').filter((item) => item !== '');
+// ─── Mocks ────────────────────────────────────────────────────────────────────
+vi.mock('../src/convert.service.js', () => ({
+    default: {
+        convert: vi.fn(),
+    },
+}));
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 describe('ConverterPage – input parsing (cleanInput)', () => {
@@ -46,7 +49,6 @@ describe('ConverterPage – input parsing (cleanInput)', () => {
         });
 
         it('handles the word "in" appearing only once', () => {
-            // "in" gets replaced, so the array should contain no "in" element
             const parts = cleanInput('10 usd in rub');
             expect(parts).not.toContain('in');
         });
@@ -55,43 +57,38 @@ describe('ConverterPage – input parsing (cleanInput)', () => {
 
 // ─── ConverterPage DOM integration ───────────────────────────────────────────
 describe('ConverterPage – DOM integration', () => {
-    beforeEach(() => {
-        // Set up minimal DOM from the component template
-        document.body.innerHTML = `
-            <input type="text" id="convert-input" value="" />
-            <button id="convert-btn">Convert</button>
-            <div id="convert-result"></div>
-        `;
+    beforeEach(async () => {
+        // Reset element state and render template
+        document.body.innerHTML = await ConverterPage.render();
+        vi.clearAllMocks();
     });
 
     it('shows error message and adds error class on bad input', async () => {
-        // Mock convertService to throw
-        const mockConvert = vi.fn().mockRejectedValue(new Error('bad'));
-        vi.doMock('../convert.service.js', () => ({ default: { convert: mockConvert } }));
+        // Set mock behavior for this specific test
+        vi.mocked(convertService.convert).mockRejectedValue(new Error('API Error'));
 
-        document.getElementById('convert-input').value = 'garbage';
+        const input = document.getElementById('convert-input');
         const result = document.getElementById('convert-result');
 
-        // Simulate what the convert() handler does
-        try {
-            result.classList.remove('result-error');
-            await mockConvert(); // will throw
-        } catch {
-            result.classList.add('result-error');
-            result.textContent = 'Пожалуйста, используйте формат: 15 USD in RUB';
-        }
+        input.value = 'garbage';
+        await ConverterPage.convert();
 
         expect(result.classList.contains('result-error')).toBe(true);
         expect(result.textContent).toContain('15 USD in RUB');
     });
 
     it('clears error class on successful conversion', async () => {
-        const result = document.getElementById('convert-result');
-        result.classList.add('result-error');
+        // Set mock behavior for this specific test
+        vi.mocked(convertService.convert).mockResolvedValue('925.00');
 
-        // Simulate successful path
-        result.classList.remove('result-error');
-        result.textContent = '925.00';
+        const input = document.getElementById('convert-input');
+        const result = document.getElementById('convert-result');
+
+        // Pre-set error state to check if it gets cleared
+        result.classList.add('result-error');
+        input.value = '10 usd in rub';
+
+        await ConverterPage.convert();
 
         expect(result.classList.contains('result-error')).toBe(false);
         expect(result.textContent).toBe('925.00');

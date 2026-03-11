@@ -1,4 +1,4 @@
-class ConvertService {
+export class ConvertService {
     #API_URL = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies';
     static instance = null;
 

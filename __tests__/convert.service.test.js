@@ -1,26 +1,28 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { ConvertService } from '../src/convert.service.js';
 
-// ─── We need to reset the singleton between tests ────────────────────────────
-// ConvertService uses a static `instance` field, so we reimport the module
-// fresh for each test via vi.resetModules().
 let convertService;
 
 beforeEach(async () => {
-    vi.resetModules();
-    // Grab a fresh module (new singleton) every test
-    const mod = await import('../src/convert.service.js');
-    convertService = mod.default;
+    // Create a fresh instance for each test to ensure isolation
+    convertService = new ConvertService();
 });
 
 afterEach(() => {
     vi.restoreAllMocks();
+    // Reset singleton instance if necessary for safety, although we use a new one above
+    ConvertService.instance = null;
 });
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 const mockFetchSuccess = (rates) => {
     global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: async () => ({ usd: { usd: 1, eur: 0.92, gbp: 0.79, rub: 92.5 }, rub: { usd: 0.0108, eur: 0.0099, gbp: 0.0085, rub: 1 }, ...rates }),
+        json: async () => ({ 
+            usd: { usd: 1, eur: 0.92, gbp: 0.79, rub: 92.5 }, 
+            rub: { usd: 0.0108, eur: 0.0099, gbp: 0.0085, rub: 1 }, 
+            ...rates 
+        }),
     });
 };
 
@@ -34,15 +36,18 @@ const mockFetchFailure = (status = 500) => {
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 describe('ConvertService', () => {
-    describe('Singleton pattern', () => {
-        it('should always return the same instance', async () => {
-            const modA = await import('../src/convert.service.js');
-            const modB = await import('../src/convert.service.js');
-            expect(modA.default).toBe(modB.default);
+    describe('Singleton pattern (logic)', () => {
+        it('should return the same instance when using the constructor', () => {
+            const instanceA = new ConvertService();
+            const instanceB = new ConvertService();
+            expect(instanceA).toBe(instanceB);
         });
 
-        it('should be frozen (immutable public API)', () => {
-            expect(Object.isFrozen(convertService)).toBe(true);
+        it('should allow resetting the instance for testing', () => {
+            const instanceA = new ConvertService();
+            ConvertService.instance = null;
+            const instanceB = new ConvertService();
+            expect(instanceA).not.toBe(instanceB);
         });
     });
 

@@ -1,4 +1,4 @@
-class StateManager {
+export class StateManager {
   #state;
   #listeners = new Set();
 

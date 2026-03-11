@@ -23,7 +23,7 @@ export default {
 
             ratesToFetch.forEach((rateInput) => {
                 convertService.convert(rateInput, 1, state.baseCurrency).then((rate) => {
-                    ratesList.innerHTML += createCurrencyCard(rateInput, rate);
+                    ratesList.innerHTML += this.createCurrencyCard(rateInput, rate);
                 });
             });
         });
