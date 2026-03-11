@@ -14,19 +14,17 @@ export default {
             </div>
         `;
     },
-    afterRender: async () => {
-        const ratesToFetch = ['usd', 'eur', 'gbp', 'rub'];
+    afterRender: function () {
         const ratesList = document.getElementById('rates-list');
+        const ratesToFetch = ['usd', 'eur', 'gbp', 'rub'];
 
         stateManager.subscribe((state) => {
             ratesList.innerHTML = '';
 
-        });
-    },
-    refreshCurrencies: () => {
-        ratesToFetch.forEach((rateInput) => {
-            convertService.convert(rateInput, 1, state.baseCurrency).then((rate) => {
-                ratesList.innerHTML += createCurrencyCard(rateInput, rate);
+            ratesToFetch.forEach((rateInput) => {
+                convertService.convert(rateInput, 1, state.baseCurrency).then((rate) => {
+                    ratesList.innerHTML += createCurrencyCard(rateInput, rate);
+                });
             });
         });
     },

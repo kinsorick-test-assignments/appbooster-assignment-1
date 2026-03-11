@@ -9,6 +9,12 @@
 
 Проект создан **без единого фреймворка** — вся отрисовка, роутинг и управление состоянием написаны вручную.
 
+### Скриншоты
+
+| Конвертер валют | Курсы валют |
+|---|---|
+| ![Конвертер](screenshots/converter.png) | ![Курсы](screenshots/rates.png) |
+
 ### Возможности
 - **Дизайн в стиле glass‑morphism** — градиенты, тени, плавные анимации.
 - **Хэш-роутинг** (`#/`, `#/rates`) — работает без настройки сервера.
@@ -80,6 +86,12 @@ npm run test:coverage  # отчёт о покрытии
 **AppBooster** is a single‑page application built with **plain JavaScript, HTML and CSS**. It showcases a modern glass‑morphism UI, hash‑based client‑side routing, a lightweight reactive state manager, and a real‑time currency‑conversion service.
 
 The project is deliberately **framework‑free** – all rendering, routing and state handling are handcrafted.
+
+### Screenshots
+
+| Converter | Exchange Rates |
+|---|---|
+| ![Converter](screenshots/converter.png) | ![Rates](screenshots/rates.png) |
 
 ### Features
 - **Glass‑morphism design** with vibrant gradients, subtle shadows and smooth micro‑animations.
