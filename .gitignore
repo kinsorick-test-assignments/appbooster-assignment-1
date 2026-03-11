@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Coverage reports
+coverage/
+
+# Build output
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
