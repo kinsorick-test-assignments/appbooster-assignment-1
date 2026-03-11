@@ -1,11 +1,11 @@
-# AppBooster – Premium Vanilla‑JS SPA
+# AppBooster – Test Assignment
 
 ---
 
 ## 🇷🇺 Русский
 
 ### Обзор
-**AppBooster** — это одностраничное приложение (SPA), созданное на чистом **JavaScript, HTML и CSS**. Проект демонстрирует современный UI в стиле glass‑morphism, клиентский хэш-роутинг, реактивный стейт-менеджер и сервис конвертации валют.
+**AppBooster Test Assignment** — это одностраничное приложение (SPA), созданное на чистом **JavaScript, HTML и CSS**. Проект демонстрирует современный UI в стиле glass‑morphism, клиентский хэш-роутинг, реактивный стейт-менеджер и сервис конвертации валют.
 
 Проект создан **без единого фреймворка** — вся отрисовка, роутинг и управление состоянием написаны вручную.
 
@@ -83,7 +83,7 @@ npm run test:coverage  # отчёт о покрытии
 ## 🇬🇧 English
 
 ### Overview
-**AppBooster** is a single‑page application built with **plain JavaScript, HTML and CSS**. It showcases a modern glass‑morphism UI, hash‑based client‑side routing, a lightweight reactive state manager, and a real‑time currency‑conversion service.
+**AppBooster Test Assignment** is a single‑page application built with **plain JavaScript, HTML and CSS**. It showcases a modern glass‑morphism UI, hash‑based client‑side routing, a lightweight reactive state manager, and a real‑time currency‑conversion service.
 
 The project is deliberately **framework‑free** – all rendering, routing and state handling are handcrafted.
 
